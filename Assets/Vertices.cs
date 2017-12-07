@@ -2,18 +2,35 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Vertices : MonoBehaviour {
+public class Vertices : MonoBehaviour
+{
 
-	// Use this for initialization
-	void Start () {
+    public GameObject anObject;
+	public GameObject a;
+    public Collider anObjCollider;
+	public static Mesh viewedModel;
+    private Camera cam;
+    private Plane[] planes;
+    // Use this for initialization
+    void Start()
+    {
+		anObject = GameObject.Find("path-4");
+		a = GameObject.Find("Car");
+		MeshFilter viewedModelFilter = (MeshFilter)anObject.GetComponent("MeshFilter");
+		viewedModel=viewedModelFilter.mesh;
 		Mesh mesh = GetComponent<MeshFilter>().mesh;
-		Debug.Log(mesh.vertices.Length);
-		Vector3[] vertices = mesh.vertices;
+		Vector3[] vertices = viewedModel.vertices;
+		Debug.Log(anObject.transform.position);
 		int i = 0;
 		while (i < vertices.Length)
 		{
-			Debug.Log(vertices[i].x);
+			GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        	cube.transform.position = new Vector3(vertices[i].x, vertices[i].y, 0);
 			i++;
 		}
 	}
+
+	/// <summary>
+	/// Update is called every frame, if the MonoBehaviour is enabled.
+	/// </summary>
 }

@@ -154,6 +154,24 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 51f16cdec01e2584b9d1af434635054c, type: 3}
   m_IsPrefabParent: 0
+--- !u!1 &170892898 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100002, guid: 51f16cdec01e2584b9d1af434635054c, type: 3}
+  m_PrefabInternal: {fileID: 96198513}
+--- !u!114 &170892899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 170892898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 219ab3fd94bd13b48ae95794813a9af0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anObject: {fileID: 0}
+  a: {fileID: 0}
+  anObjCollider: {fileID: 0}
 --- !u!1 &498693016
 GameObject:
   m_ObjectHideFlags: 0
@@ -318,6 +336,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 219ab3fd94bd13b48ae95794813a9af0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anObject: {fileID: 0}
+  a: {fileID: 0}
+  anObjCollider: {fileID: 0}
 --- !u!1001 &1119608237
 Prefab:
   m_ObjectHideFlags: 0
@@ -363,6 +384,26 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 19900000, guid: 0e7ee4df08df88c4880f43398f9ad2c2, type: 2}
       propertyPath: m_SelectedEditorRenderState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 0e7ee4df08df88c4880f43398f9ad2c2, type: 2}
+      propertyPath: InitialModule.startSizeY.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 0e7ee4df08df88c4880f43398f9ad2c2, type: 2}
+      propertyPath: InitialModule.startSizeZ.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 0e7ee4df08df88c4880f43398f9ad2c2, type: 2}
+      propertyPath: InitialModule.startRotationX.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 0e7ee4df08df88c4880f43398f9ad2c2, type: 2}
+      propertyPath: InitialModule.startRotationY.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800000, guid: 0e7ee4df08df88c4880f43398f9ad2c2, type: 2}
+      propertyPath: randomSeed
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -481,3 +522,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 219ab3fd94bd13b48ae95794813a9af0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anObject: {fileID: 0}
+  a: {fileID: 0}
+  anObjCollider: {fileID: 0}
