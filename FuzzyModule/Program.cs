@@ -13,7 +13,13 @@ namespace FuzzyLogic {
             ArrayList inference = InferenceWorking(type, fuzzificate);
             foreach (var item in inference) {
                 Object[] l = (Object[]) item;
-                Console.WriteLine("{0} - {1} - {2}", l[0], l[1], l[2]);
+                ArrayList speed = (ArrayList) l[0];
+                String label = (String) l[1];
+                double muy = (double) l[2];
+                foreach (var s in speed) {
+                    Console.Write("{0}, ", (double) s);
+                }
+                Console.WriteLine("{0} - {1}", l[1], l[2]);
             }
         }
 
@@ -45,11 +51,11 @@ namespace FuzzyLogic {
                 foreach (var angle in angle_instances) {
                     if (light_instances != null) {
                         foreach (var light in light_instances) {
-                            Object[] speed = new Object[3] {123, "Fast", 1};//(Object[]) InferenceEngine.Inference(distance, angle, light);
+                            Object[] speed = (Object[]) InferenceEngine.Inference((Object[]) distance, (Object[]) angle, (Object[]) light);
                             result.Add(speed);
                         }
                     } else {
-                        Object[] speed = new Object[3] {12, "Slow", 0.5};//(Object[]) InferenceEngine.Inference(distance,angle);
+                        Object[] speed = (Object[]) InferenceEngine.Inference((Object[]) distance, (Object[]) angle);
                         result.Add(speed);
                     }
                 }

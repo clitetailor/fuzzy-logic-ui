@@ -2,11 +2,16 @@ using System;
 
 namespace FuzzyLogic {
     class Rules {
+        public static double[] DISTANCE_ARGS = new double[4] {0, 70, 140, 210}; //(m)
+        public static double[] LIGHT_RED_ARGS = new double[3] {0, 3, 6}; //(s)
+        public static double[] LIGHT_YELLOW_ARGS = new double[3] {0, 3, 6}; //(s)
+        public static double[] LIGHT_GREEN_ARGS = new double[3] {0, 3, 6};
+        public static double[] ANGLE_ARGS = new double[4] {0, 7, 14, 21}; //(*)
+        public static double[] SPEED_ARGS = new double[5] {0, 0.1, 0.5, 1, 1.5};
         // type
         public const bool LIGHT_TYPE = true;
         public const bool OBSTACLE_TYPE = false;
-        // NONE
-        private const String NONE = "None";
+        public const String NONE = "None";
         //Distance
         public const String N = "Near";
         public const String MD = "Medium";
@@ -26,8 +31,7 @@ namespace FuzzyLogic {
         public const String Sl = "Slow";
         public const String Sr = "Slower";
         public const String Fs = "Fast";
-
-        private readonly String[,] LIGHT_RULES = new String[45, 4] {
+        private static readonly String[,] LIGHT_RULES = new String[45, 4] {
             {N, G, Sm, Fs},
             {N, G, MD, Sr},
             {N, G, B, Sl},
@@ -75,7 +79,7 @@ namespace FuzzyLogic {
             {Fr, LR, B, Sl}            
         };
 
-        private readonly String[,] OBSTACLE_RULES = new String[9, 3] {
+        private static readonly String[,] OBSTACLE_RULES = new String[9, 3] {
             {N, Sm, St},
             {N, MA, St},
             {N, B, St},
@@ -87,17 +91,17 @@ namespace FuzzyLogic {
             {Fr, B, Sl}
         };
 
-        public String[] checkRule(bool type, String distance, String angle, String lightStatus = NONE) {
-            if (type == LIGHT_TYPE) {
+        public static Object[] checkRule(String distance, String angle, String light_status = NONE) {
+            if (light_status == NONE) {
                 for (int i = 0, l = LIGHT_RULES.Length; i < l; i++) {
-                    if (LIGHT_RULES[i, 0] == distance && LIGHT_RULES[i, 1] == lightStatus && LIGHT_RULES[i, 2] == angle) {
-                        return new String[4]{LIGHT_RULES[i, 0], LIGHT_RULES[i, 1], LIGHT_RULES[i, 2], LIGHT_RULES[i,3]};
+                    if (LIGHT_RULES[i, 0] == distance && LIGHT_RULES[i, 1] == light_status && LIGHT_RULES[i, 2] == angle) {
+                        return new Object[4]{LIGHT_RULES[i, 0], LIGHT_RULES[i, 1], LIGHT_RULES[i, 2], LIGHT_RULES[i,3]};
                     }
                 }
             } else { // OBSTACLE_TYPE
                 for (int i = 0, l = OBSTACLE_RULES.Length; i < l; i++) {
                     if (OBSTACLE_RULES[i, 0] == distance && OBSTACLE_RULES[i, 1] == angle) {
-                        return new String[3]{OBSTACLE_RULES[i, 0], OBSTACLE_RULES[i, 1], OBSTACLE_RULES[i, 2]};
+                        return new Object[3]{OBSTACLE_RULES[i, 0], OBSTACLE_RULES[i, 1], OBSTACLE_RULES[i, 2]};
                     }
                 }
             }
