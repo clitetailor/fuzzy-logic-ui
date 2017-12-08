@@ -6,15 +6,15 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v2.0": {
-      "Fuzzy-Autocar/1.0.0": {
+      "Fuzzy-AutoCar/1.0.0": {
         "runtime": {
-          "Fuzzy-Autocar.dll": {}
+          "Fuzzy-AutoCar.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "Fuzzy-Autocar/1.0.0": {
+    "Fuzzy-AutoCar/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

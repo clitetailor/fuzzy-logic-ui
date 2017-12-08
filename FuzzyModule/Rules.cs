@@ -3,8 +3,8 @@ using System;
 namespace FuzzyLogic {
     class Rules {
         // type
-        private const bool LIGHT_TYPE = true;
-        private const bool OBSTACLE_TYPE = false;
+        public const bool LIGHT_TYPE = true;
+        public const bool OBSTACLE_TYPE = false;
         // NONE
         private const String NONE = "None";
         //Distance

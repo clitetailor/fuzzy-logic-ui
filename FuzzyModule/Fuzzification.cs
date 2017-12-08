@@ -8,6 +8,7 @@ namespace FuzzyLogic {
         private static readonly int[] LIGHT_YELLOW_ARGS = new int[3] {0, 3, 6}; //(s)
         private static readonly int[] LIGHT_GREEN_ARGS = new int[3] {0, 3, 6};
         private static readonly int[] ANGLE_ARGS = new int[4] {0, 7, 14, 21}; //(*)
+
         public static ArrayList DistanceFuzzificate(double distance) {
             ArrayList result = new ArrayList();
             double value;
