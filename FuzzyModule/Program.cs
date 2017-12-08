@@ -4,23 +4,16 @@ using System.Collections;
 namespace FuzzyLogic {
     class Program {
         static void Main(string[] args){
+            Console.WriteLine("Start");
             bool type = Rules.LIGHT_TYPE;
-            double sample_distance = 141;
+            double sample_distance = 30;
             double sample_lightTime = 5;
-            double sample_angle = 17;
-            Object[] light_status = new Object[2] {"Red", sample_lightTime};
+            double sample_angle = 5;
+            Object[] light_status = new Object[2] {"Green", sample_lightTime};
             ArrayList fuzzificate = Fuzzificate(type, sample_distance, sample_angle, light_status);
             ArrayList inference = InferenceWorking(type, fuzzificate);
-            foreach (var item in inference) {
-                Object[] l = (Object[]) item;
-                ArrayList speed = (ArrayList) l[0];
-                String label = (String) l[1];
-                double muy = (double) l[2];
-                foreach (var s in speed) {
-                    Console.Write("{0}, ", (double) s);
-                }
-                Console.WriteLine("{0} - {1}", l[1], l[2]);
-            }
+            double speed = Defuzzification.Defuzzificate(inference);
+            Console.WriteLine("Speed: {0}", speed);
         }
 
         private static ArrayList Fuzzificate(bool isLight, double distance, double angle, Object[] light_status) {

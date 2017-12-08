@@ -2,12 +2,12 @@ using System;
 
 namespace FuzzyLogic {
     class Rules {
-        public static double[] DISTANCE_ARGS = new double[4] {0, 70, 140, 210}; //(m)
-        public static double[] LIGHT_RED_ARGS = new double[3] {0, 3, 6}; //(s)
-        public static double[] LIGHT_YELLOW_ARGS = new double[3] {0, 3, 6}; //(s)
-        public static double[] LIGHT_GREEN_ARGS = new double[3] {0, 3, 6};
-        public static double[] ANGLE_ARGS = new double[4] {0, 7, 14, 21}; //(*)
-        public static double[] SPEED_ARGS = new double[5] {0, 0.1, 0.5, 1, 1.5};
+        public static double[] DISTANCE_ARGS = new double[4] {0, 70, 140, 210}; // 100(m)
+        public static double[] LIGHT_RED_ARGS = new double[3] {0, 3, 6}; //10(s)
+        public static double[] LIGHT_YELLOW_ARGS = new double[2] {0, 2}; //5(s)
+        public static double[] LIGHT_GREEN_ARGS = new double[3] {0, 3, 6}; //10(s)
+        public static double[] ANGLE_ARGS = new double[4] {0, 7, 14, 21}; //90(*)
+        public static double[] SPEED_ARGS = new double[5] {0, 0.1, 0.5, 1, 1.5}; //150(mph)
         // type
         public const bool LIGHT_TYPE = true;
         public const bool OBSTACLE_TYPE = false;
