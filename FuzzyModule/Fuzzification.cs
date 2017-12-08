@@ -24,7 +24,7 @@ namespace FuzzyLogic {
                 }
                 value = (distance - Rules.DISTANCE_ARGS[2]) / (Rules.DISTANCE_ARGS[3] - Rules.DISTANCE_ARGS[2]);
                 result.Add(new Object[2] {Rules.Fr, value});
-            } else if (distance >= Rules.DISTANCE_ARGS[4]) {
+            } else if (distance >= Rules.DISTANCE_ARGS[3]) {
                 result.Add(new Object[2] {Rules.Fr, 1});
             }
             return result;
@@ -58,11 +58,8 @@ namespace FuzzyLogic {
                         if (value > 0) {
                             result.Add(new Object[2] {Rules.Y, value});
                         }
-                    } else if (time >= Rules.LIGHT_YELLOW_ARGS[1] && time < Rules.LIGHT_YELLOW_ARGS[2]) {
-                        value = (Rules.LIGHT_YELLOW_ARGS[2] - time) / (Rules.LIGHT_YELLOW_ARGS[2] - Rules.LIGHT_YELLOW_ARGS[1]);
-                        if (value > 0) {
-                            result.Add(new Object[2] {Rules.Y, value});
-                        }
+                    } else if (time >= Rules.LIGHT_YELLOW_ARGS[1]) {
+                            result.Add(new Object[2] {Rules.Y, 1});
                     }
                     break;
                 }
