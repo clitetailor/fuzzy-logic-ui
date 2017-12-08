@@ -16,10 +16,12 @@ public class Vertices : MonoBehaviour
 
 		MeshFilter viewedModelFilter = (MeshFilter) pathPlane.GetComponent("MeshFilter");
 		viewedModel = viewedModelFilter.mesh;
-		
+
 		Vector3[] vertices = viewedModel.vertices;
 		Vector3 scale = pathPlane.transform.localScale;
 		Quaternion rotation = pathPlane.transform.localRotation;
+
+		Debug.Log(vertices.Length);
 
 		int i = 0;
 		while (i < vertices.Length)
