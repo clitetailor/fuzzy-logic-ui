@@ -12,38 +12,30 @@ public class ObstacleScript : MonoBehaviour {
 	}
 
 	// Update is called once per frame
-	void Update()
-	{
+	void Update() {
 		if (Input.GetMouseButtonDown(0)) {
 			ClickEventHandler();
 		}
 	}
 
-	void ClickEventHandler()
-	{
+	void ClickEventHandler() {
 		RaycastHit hit;
 
 		Ray ray = camera.ScreenPointToRay(Input.mousePosition);
 
-		if (Physics.Raycast(ray, out hit))
-		{
-			if (hit.transform.name == "Plane")
-			{
+		if (Physics.Raycast(ray, out hit)) {
+			if (hit.transform.name == "Plane") {
 				CreateNewObstacle(hit.point);
-			}
-			else if (hit.transform.gameObject.tag == "Obstacle")
-			{
+			} else if (hit.transform.gameObject.tag == "Obstacle") {
 				RemoveObstacle(hit.transform.gameObject);
-			}
-			else
-			{
+			} else {
 				//Pass
 			}
-		}
-	}
-
-	void CreateNewObstacle(Vector3 position)
-	{
+			
+		}	
+	}		
+			
+	void CreateNewObstacle(Vector3 position) {
 		GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
 		cube.transform.position = position;
@@ -53,8 +45,7 @@ public class ObstacleScript : MonoBehaviour {
 		rend.material.shader = Shader.Find("Standard");
 	}
 
-	void RemoveObstacle(GameObject gameObject)
-	{
+	void RemoveObstacle(GameObject gameObject) {
 		Destroy(gameObject);
 	}
 }
