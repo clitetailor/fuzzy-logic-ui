@@ -12,6 +12,8 @@ public class TrafficLightBehavior : MonoBehaviour {
 	Material yellowLight;
 	Material greenLight;
 
+	TextMesh countDownText;
+
 	enum LightColor { 
 		GREEN_LIGHT,
 		YELLOW_LIGHT,
@@ -19,7 +21,7 @@ public class TrafficLightBehavior : MonoBehaviour {
 	}
 
 	LightColor lightColor = LightColor.GREEN_LIGHT;
-	int countDown = 10;
+	int countDown = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -27,23 +29,24 @@ public class TrafficLightBehavior : MonoBehaviour {
 		yellowLight = transform.Find("MiddleLight").GetComponent<Renderer>().material;
 		greenLight = transform.Find("BottomLight").GetComponent<Renderer>().material;
 
-		if (
-			name == "TrafficLight"
-			&& redLight != null
-			&& yellowLight != null
-			&& greenLight != null
-		) {
-			StartCoroutine(Lighting());
-		}
+		countDownText = transform.Find("CountDown").GetComponent<TextMesh>();
+
+		TurnOn(greenLight);
+		
+		StartCoroutine(Lighting());
 	}
 
 	IEnumerator Lighting() {
-		if (countDown > 0) {
-			--countDown;
-		} else {
+		--countDown;
+		
+		if (countDown < 0) {
 			switch (lightColor) {
 				case LightColor.GREEN_LIGHT: {
 						lightColor = LightColor.YELLOW_LIGHT;
+						
+						TurnOn(yellowLight);
+						TurnOff(greenLight);
+
 						countDown = yellowTime;
 				
 						break;
@@ -51,6 +54,10 @@ public class TrafficLightBehavior : MonoBehaviour {
 
 				case LightColor.YELLOW_LIGHT: {
 						lightColor = LightColor.RED_LIGHT;
+
+						TurnOn(redLight);
+						TurnOff(yellowLight);
+
 						countDown = redTime;
 
 						break;
@@ -58,6 +65,10 @@ public class TrafficLightBehavior : MonoBehaviour {
 
 				case LightColor.RED_LIGHT: {
 						lightColor = LightColor.GREEN_LIGHT;
+
+						TurnOn(greenLight);
+						TurnOff(redLight);
+
 						countDown = greenTime;
 				
 						break;
@@ -65,6 +76,11 @@ public class TrafficLightBehavior : MonoBehaviour {
 
 				default: {
 						lightColor = LightColor.GREEN_LIGHT;
+
+						TurnOff(redLight);
+						TurnOff(yellowLight);
+						TurnOn(greenLight);
+
 						countDown = greenTime;
 
 						break;
@@ -72,16 +88,25 @@ public class TrafficLightBehavior : MonoBehaviour {
 			}
 		}
 
+		if (countDownText != null)
+		{
+			countDownText.text = countDown.ToString();
+		}
+
 		yield return new WaitForSeconds(1);
 		StartCoroutine(Lighting());
 	}
 
-	void TurnOff(ref Material lightMaterial) {
-		lightMaterial.DisableKeyword("_EMISSION");
+	void TurnOff(Material lightMaterial) {
+		if (lightMaterial != null) {
+			lightMaterial.DisableKeyword("_EMISSION");
+		}
 	}
 
-	void TurnOn(ref Material lightMaterial) {
-		lightMaterial.EnableKeyword("_EMISSION");
+	void TurnOn(Material lightMaterial) {
+		if (lightMaterial != null) {
+			lightMaterial.EnableKeyword("_EMISSION");
+		}	
 	}
 	
 	// Update is called once per frame

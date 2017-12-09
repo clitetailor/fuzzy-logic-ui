@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ObstacleScript : MonoBehaviour {
 
-	private Camera camera;
+	private new Camera camera;
 
 	// Use this for initialization
 	void Start () {
