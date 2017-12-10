@@ -15,15 +15,6 @@ public class CarController : MonoBehaviour {
 	Transform target;
 	Vector3 offsetTargetPos;
 	new Rigidbody rigidbody;
-	
-	private float cautiousMaxAngle = 50f;
-	private float cautiousAngularVelocityFactor = Mathf.Rad2Deg * 2 / 3;
-
-	private float m_AccelSensitivity = 0.0f;
-	private float m_BrakeSensitivity = 1f;
-	private float m_SteerSensitivity = 0.05f;
-
-	private float m_CautiousSpeedFactor = 0.05f;
 
 	void Start()
 	{
@@ -97,12 +88,12 @@ public class CarController : MonoBehaviour {
 		// pass the input to the car!
 		int radius = 5;
 		List<GameObject> trackPoints;
-		trackPoints = FrontTrackPoints(5);
+		trackPoints = FrontTrackPoints(10);
 		float desiredAngle = RotateAngle(trackPoints);
 		//float deltaAngle = desiredAngle - m_Car.CurrentSteerAngle;
 
 		//Debug.Log("Current Angle: " + m_Car.CurrentSteerAngle);
-		Debug.Log("Desired Angle: " + desiredAngle);
+		//Debug.Log("Desired Angle: " + desiredAngle);
 		//Debug.Log("Delta Angle:   " + deltaAngle);
 
 		//float h1 = deltaAngle / 90;
@@ -111,7 +102,7 @@ public class CarController : MonoBehaviour {
 		//float h = - desiredAngle / 90;
 		float v = CrossPlatformInputManager.GetAxis("Vertical");
 
-		Debug.Log("h:             " + h);
+		//Debug.Log("h:             " + h);
 		//Debug.Log("h1:            " + h1);
 		//Debug.Log("h2:            " + h2);
 
@@ -135,7 +126,7 @@ public class CarController : MonoBehaviour {
 				Quaternion lookRotation = Quaternion.LookRotation(colliderOffset);
 
 				return collider.gameObject.name == "TrackedPoint"
-				&& Quaternion.Angle(lookRotation, transform.rotation) < 60
+				&& Quaternion.Angle(lookRotation, transform.rotation) < 90
 				&& Vector3.Distance(transform.position, collider.gameObject.transform.position) > 0f;
 			})
 			.Select(collider => collider.gameObject)
@@ -146,26 +137,40 @@ public class CarController : MonoBehaviour {
 		List<float> amounts = trackPoints
 			.Select(point =>
 				Vector3.Distance(point.transform.position, transform.position))
-			.Select(length => 1f / length)
+			.Select(length => 1f / ( Mathf.Abs(length - 5) + 1 ))
 			.ToList();
-		
+
 		float sum = 0;
-
-		foreach (float amount in amounts) {
-			sum += amount;
+		for (int i = 0; i < amounts.Count; ++i) {
+			sum += amounts[i];
 		}
 
-		amounts = amounts.Select(amount => amount / sum)
-			.ToList();
-
-		float angle = 0f;
+		float accum = 0;
 		for (int i = 0; i < trackPoints.Count; ++i) {
-			Vector3 carRotation = transform.rotation.eulerAngles;
-			Vector3 pointRotation = trackPoints[i].transform.rotation.eulerAngles;
+			Quaternion rotation = Quaternion.LookRotation(trackPoints[i].transform.position - transform.position);
+			float carY = transform.rotation.eulerAngles.y;
+			float roadY = rotation.eulerAngles.y;
 
-			angle = (pointRotation.y - carRotation.y) * amounts[i];
+			Modular(ref carY);
+			Modular(ref roadY);
+
+			float deltaY = roadY - carY;
+			Modular(ref deltaY);
+			accum += deltaY * amounts[i] / sum;
 		}
 
+		float angle = accum;
+		
 		return angle;
+	}
+
+	private void Modular(ref float angle) {
+		while (angle < -180f) {
+			angle += 360f;
+		}
+
+		while (angle > 180f) {
+			angle -= 360f;
+		}
 	}
 }
