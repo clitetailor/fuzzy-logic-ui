@@ -13,6 +13,7 @@ public class Vertices : MonoBehaviour {
 
 	[HideInInspector]
 	public List<List<Vector3>> vertexTriples = new List<List<Vector3>>();
+    public float roadWidth;
 
 	// Use this for initialization
 	void Start() {
@@ -57,12 +58,16 @@ public class Vertices : MonoBehaviour {
 			// Find the edge midpoint
 			if (edgePoints.Count == 2) {
 				trackedPoints.Add((edgePoints[0] + edgePoints[1]) / 2);
+                float currWidth = Vector3.Distance(edgePoints[0],edgePoints[1]);
+                if(roadWidth < currWidth) {
+                    roadWidth = currWidth;
+                }
 			}
 		}
 
-		foreach (Vector3 vertex in trackedPoints) {
-			GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-			cube.transform.position = vertex;
-		}
+		// foreach (Vector3 vertex in trackedPoints) {
+		// 	GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		// 	cube.transform.position = vertex;
+		// }
 	}
 }
