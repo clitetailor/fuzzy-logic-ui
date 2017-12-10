@@ -8,7 +8,7 @@ namespace FuzzyLogic {
             double sample_distance = 99d;
             double sample_lightTime = 7d;
             double sample_angle = 1d;
-            Object[] light_status = new Object[2] {"Green", sample_lightTime};
+            Object[] light_status = new Object[2] {"Green", sample_lightTime };
             Console.WriteLine("Speed: {0}", CalculateSpeed(type, sample_distance, sample_angle, light_status));
         }
 

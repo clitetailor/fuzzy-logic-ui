@@ -108,10 +108,4 @@ public class TrafficLightBehavior : MonoBehaviour {
 			lightMaterial.EnableKeyword("_EMISSION");
 		}	
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
 }
