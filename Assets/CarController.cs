@@ -26,6 +26,7 @@ public class CarController : MonoBehaviour {
 	/// </summary>
 	void getObjectInView()
 	{
+        obstaclesFound = new List<Vector3>();
 		GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
 		RaycastHit hit;
 		for(var i = 0; i < obstacles.Length; i++)
@@ -34,18 +35,18 @@ public class CarController : MonoBehaviour {
             Ray ray = Camera.main.ScreenPointToRay(screenPoint);
 			if(Physics.Raycast(ray, out hit))
 			{
-				Debug.Log(isObstacleInRoad(obstacles[i].transform.position));
+				if(isObstacleInRoad(obstacles[i].transform.position)){
+                    obstaclesFound.Add(obstacles[i].transform.position);
+                }
 			}
 		}
 	}
 
 	bool isObstacleInRoad(Vector3 obstaclePoint) {
-        int minPoint = 0;
         float minDistance = Vector3.Distance(obstaclePoint,road.trackedPoints[0]);
         for(int i = 1; i < road.trackedPoints.Count; ++i) {
             float curr = Vector3.Distance(obstaclePoint,road.trackedPoints[i]);
             if(curr < minDistance) {
-                minPoint = i;
                 minDistance = curr;
             }
         }

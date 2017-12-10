@@ -7,6 +7,7 @@ using System;
 public class Vertices : MonoBehaviour {
     private GameObject pathPlane;
 	private Mesh roadMesh;
+    private int MAX_TRAFFIC_LIGHT = 4;
 
 	[HideInInspector]
 	public List<Vector3> trackedPoints = new List<Vector3>();
@@ -27,6 +28,9 @@ public class Vertices : MonoBehaviour {
 		vertices = vertices
 			.Select(vertex => pathPlane.transform.TransformPoint(vertex))
 			.ToList();
+
+        List<Vector3> trafficLights = getExistedTrafficLight(vertices);
+        randomTrafficLight(trafficLights, vertices);
 
 		int numberOfTriangles = triangles.Count / 3;
 
@@ -57,6 +61,22 @@ public class Vertices : MonoBehaviour {
 
 			// Find the edge midpoint
 			if (edgePoints.Count == 2) {
+                for(int j = 1; j < trafficLights.Count; ++j) {
+                    if(edgePoints[0] == trafficLights[j]) {
+                        Vector3 position = edgePoints[0];
+                        Vector3 rotation;
+                        rotation = edgePoints[1] - edgePoints[0];
+                        Instantiate(GameObject.FindGameObjectsWithTag("TrafficLight")[0], position, Quaternion.LookRotation(rotation));
+                        trafficLights[j] = Vector3.zero;
+                    } 
+                    if(edgePoints[1] == trafficLights[j]) {
+                        Vector3 position = edgePoints[1];
+                        Vector3 rotation;
+                        rotation = edgePoints[0] - edgePoints[1];
+                        Instantiate(GameObject.FindGameObjectsWithTag("TrafficLight")[0], position, Quaternion.LookRotation(rotation));
+                        trafficLights[j] = Vector3.zero;
+                    }
+                }
 				trackedPoints.Add((edgePoints[0] + edgePoints[1]) / 2);
                 float currWidth = Vector3.Distance(edgePoints[0],edgePoints[1]);
                 if(roadWidth < currWidth) {
@@ -70,4 +90,42 @@ public class Vertices : MonoBehaviour {
 		// 	cube.transform.position = vertex;
 		// }
 	}
+
+    List<Vector3> getExistedTrafficLight(List<Vector3> vertices) {
+        GameObject[] trafficLights = GameObject.FindGameObjectsWithTag("TrafficLight");
+        List<Vector3> trafficPosition = new List<Vector3>();
+        for(int i = 0; i < trafficLights.Length;++i) {
+            trafficPosition.Add(findTrafficLight(trafficLights[i].transform.position,vertices));
+        }
+        return trafficPosition;
+    }
+
+    Vector3 findTrafficLight(Vector3 lightPosition,List<Vector3> vertices) {
+        Vector3 position = Vector3.zero;
+        float minDist = Mathf.Infinity;
+        for(int i = 0; i < vertices.Count; ++i) {
+            float currDist = Vector3.Distance(lightPosition,vertices[i]);
+            if(currDist < minDist) {
+                minDist = currDist;
+                position = vertices[i];
+            }
+        }
+        return position;
+    }
+
+    void randomTrafficLight(List<Vector3> trafficLights,List<Vector3> vertices) {
+        while(trafficLights.Count < MAX_TRAFFIC_LIGHT) {
+            bool add = true;
+            int random = UnityEngine.Random.Range(0,vertices.Count);
+            for(int i = 0; i < trafficLights.Count;++i) {
+                float dist = Vector3.Distance(trafficLights[i],vertices[random]);
+                if(dist < 50) {
+                    add = false;
+                }
+            }
+            if(add){
+                trafficLights.Add(vertices[random]);
+            }
+        }
+    }
 }
