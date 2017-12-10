@@ -67,7 +67,7 @@ namespace FuzzyLogic {
             ArrayList fuzzificate = Fuzzificate(type, distance, angle, light_status);
             ArrayList inference = InferenceWorking(type, fuzzificate);
             double speed = Defuzzification.Defuzzificate(inference);
-            return (double) speed;
+            return speed;
         }
 
         private static ArrayList Fuzzificate(bool isLight, double distance, double angle, Object[] light_status) {

@@ -34,8 +34,6 @@ public class CarController : MonoBehaviour
 			.Select(gameObject => gameObject.GetComponent<TrafficLightBehavior>())
 			.ToList();
 		
-		
-
         rigidbody = GetComponent<Rigidbody>();
     }
 
@@ -56,7 +54,9 @@ public class CarController : MonoBehaviour
         //float h = CrossPlatformInputManager.GetAxis("Horizontal");
         float v = CrossPlatformInputManager.GetAxis("Vertical");
 
-		float speed = CaculateSpeed();
+		float speed = CaculateSpeed(desiredAngle);
+
+		Debug.Log(speed);
 
     #if !MOBILE_INPUT
         float handbrake = CrossPlatformInputManager.GetAxis("Jump");
@@ -66,7 +66,8 @@ public class CarController : MonoBehaviour
     #endif
     }
 
-	private float CaculateSpeed() {
+	private float CaculateSpeed(float roadAngle) {
+		return (float) Program.CalculateSpeed(true, 10d, roadAngle, new System.Object[2] { "Yellow", 2d });
 	}
 
     private List<GameObject> FrontTrackPoints(int radius)
@@ -181,53 +182,27 @@ public class CarController : MonoBehaviour
 	}
 
 
-	private GameObject DetectTrafficLight()
+	private TrafficLightBehavior DetectTrafficLight()
 	{
-		List<GameObject> traficLights = new List<GameObject>(GameObject.FindGameObjectsWithTag("TrafficLight"));
 		RaycastHit hit;
+		float minDist = Mathf.Infinity;
+		TrafficLightBehavior nearestTrafficLight = null;
 
-		foreach (GameObject trafficLight in traficLights)
+		foreach (TrafficLightBehavior trafficLight in trafficLights)
 		{
 			Vector3 screenPoint = Camera.main.WorldToScreenPoint(trafficLight.transform.position);
 			Ray ray = Camera.main.ScreenPointToRay(screenPoint);
 
 			if (Physics.Raycast(ray, out hit))
 			{
-				if (trafficLight.GetComponent<TrafficLightBehavior>().lightColor != 0)
-				{
-					trafficLightsFound.Add(TrafficLightTrackPoint(trafficLight.transform.position, trafficLight.transform.forward));
-				}
-			}
-
-			GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-			cube.transform.position = TrafficLightTrackPoint(trafficLight.transform.position, trafficLight.transform.forward);
-		}
-
-		return null;
-	}
-
-	private Vector3 TrafficLightTrackPoint(Vector3 lightPosition, Vector3 rotation)
-	{
-		Vector3 lightPoint = road.trackedPoints[0];
-		float minDist = Vector3.Distance(lightPosition, road.trackedPoints[0]);
-
-		for (int i = 1; i < road.trackedPoints.Count; ++i)
-		{
-			Vector3 currPoint = road.trackedPoints[i];
-			float curr = -rotation.z * (currPoint.x - lightPosition.x) + rotation.x * (currPoint.z - lightPosition.z);
-
-			if (Mathf.Abs(curr) < 0.5)
-			{
-				float currDist = Vector3.Distance(lightPosition, currPoint);
-				if (currDist < minDist)
-				{
-					lightPoint = currPoint;
-					minDist = currDist;
+				float dist = Vector3.Distance(transform.position, trafficLight.transform.position);
+				if (dist < minDist) {
+					minDist = dist;
+					nearestTrafficLight = trafficLight;
 				}
 			}
 		}
 
-		return lightPoint;
+		return nearestTrafficLight;
 	}
-
 }
