@@ -16,5 +16,11 @@ light <- scan(paste("light-", args[1], ".txt", sep=""), what=list(data=0))$data
 speed <- scan(paste("speed-", args[1], ".txt", sep=""), what=list(data=0))$data
 scatter3D(distance, angle, light, colvar=speed, 
             main=paste(toupper(substr(args[1], 1, 1)), tolower(substring(args[1], 2)), " light", sep=""), 
-            xlab="Distance", ylab="Angle", zlab="Light time", clab="Speed",
-            theta=lon, phi=lat)
+            xlab="Distance (m)", ylab="Angle (*)", zlab="Light time (s)", clab="Speed (mph)",
+            # theta=lon, phi=lat,
+            ticktype="detailed", nticks=5)
+
+library("plot3Drgl")
+plotrgl()
+
+while (1) {}
