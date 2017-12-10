@@ -46,7 +46,7 @@ public class Vertices : MonoBehaviour {
 			List<Vector3> curr = vertexTriples[i];
 			List<Vector3> next = vertexTriples[(i + 1) % numberOfTriangles];
 
-			// Find the shared edge of two consecutive triangle
+			// Find the shared edge of two consecutive triangles
 			List<Vector3> edgePoints = new List<Vector3>();
 			foreach (Vector3 vertex in next) {
 				if (curr.IndexOf(vertex) != -1) {
@@ -58,11 +58,6 @@ public class Vertices : MonoBehaviour {
 			if (edgePoints.Count == 2) {
 				trackedPoints.Add((edgePoints[0] + edgePoints[1]) / 2);
 			}
-		}
-
-		foreach (Vector3 vertex in trackedPoints) {
-			GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-			cube.transform.position = vertex;
 		}
 	}
 }
