@@ -8,56 +8,47 @@ public class Vertices : MonoBehaviour {
     private GameObject pathPlane;
 	private Mesh roadMesh;
 
-	Vector3[] vertices;
-	int[] triangles;
 
 	List<Vector3> trackedPoints = new List<Vector3>();
 
-	int numberOfTriangles = 0;
-
-	ArrayList vertexTriples = new ArrayList();
+	List<List<Vector3>> vertexTriples = new List<List<Vector3>>();
 
 	// Use this for initialization
 	void Start() {
 		pathPlane = GameObject.Find("Plane.001");
 
 		roadMesh = pathPlane.GetComponent<MeshFilter>().mesh;
-		vertices = roadMesh.vertices;
-        triangles = roadMesh.triangles;
+		List<Vector3> vertices = new List<Vector3>(roadMesh.vertices);
+        List<int> triangles = new List<int>(roadMesh.triangles);
 		
+		// To absolute positions
+		vertices = vertices
+			.Select(vertex => transform.TransformPoint(vertex))
+			.ToList();
 
-		Vector3 roadCenter = pathPlane.transform.position;
-
-		Vector3[] absolutePositions = new Vector3[vertices.Length];
-
-		for (int i = 0; i < vertices.Length; ++i) {
-			Vector3 vertex = transform.TransformPoint(vertices[i]);
-			absolutePositions[i] = new Vector3(vertex.x, 0, vertex.z);
-		}
-
-		vertices = absolutePositions;
-		
-		numberOfTriangles = triangles.Length / 3;
+		int numberOfTriangles = triangles.Count / 3;
 
 		for (int i = 0; i < numberOfTriangles; ++i) {
 			int startIndex = i * 3;
-			Vector3[] triple = {
+
+			List<Vector3> triple = new List<Vector3>(new Vector3[] {
 				vertices[ triangles[startIndex] ],
 				vertices[ triangles[startIndex + 1] ],
 				vertices[ triangles[startIndex + 2] ]
-			};
+			});
 
 			vertexTriples.Add(triple);
 		}
 
 		for (int i = 0; i < numberOfTriangles; ++i)
 		{
-			Vector3[] curr = (Vector3[])vertexTriples[i];
-			Vector3[] next = (Vector3[])vertexTriples[(i + 1) % numberOfTriangles];
+			List<Vector3> curr = vertexTriples[i];
+			List<Vector3> next = vertexTriples[(i + 1) % numberOfTriangles];
 
-			ArrayList edgePoints = new ArrayList();
+			// Find the shared edge of two consecutive triangle
+			List<Vector3> edgePoints = new List<Vector3>();
 			foreach (Vector3 vertex in next) {
-				if (Array.IndexOf(curr, vertex) != -1) {
+				if (curr.IndexOf(vertex) != -1) {
 					edgePoints.Add(vertex);
 				}
 			}
