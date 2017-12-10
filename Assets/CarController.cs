@@ -11,6 +11,8 @@ public class CarController : MonoBehaviour {
 
 	UnityStandardAssets.Vehicles.Car.CarController m_Car;
 	Vertices road;
+    List<Vector3> trafficLightsFound = new List<Vector3>();
+    List<Vector3> obstaclesFound = new List<Vector3>();
 
 	Transform target;
 	Vector3 offsetTargetPos;
@@ -26,7 +28,82 @@ public class CarController : MonoBehaviour {
 		transform.rotation = Quaternion.LookRotation(direction);
 
 		rigidbody = GetComponent<Rigidbody>();
+        detectLight();
 	}
+
+	/// <summary>
+	/// Update is called every frame, if the MonoBehaviour is enabled.
+	/// </summary>
+	void getObjectInView()
+	{
+        obstaclesFound = new List<Vector3>();
+		GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
+		RaycastHit hit;
+		for(var i = 0; i < obstacles.Length; i++)
+		{
+            Vector3 screenPoint = Camera.main.WorldToScreenPoint(obstacles[i].transform.position);
+            Ray ray = Camera.main.ScreenPointToRay(screenPoint);
+			if(Physics.Raycast(ray, out hit))
+			{
+				if(isObstacleInRoad(obstacles[i].transform.position)){
+                    obstaclesFound.Add(obstacles[i].transform.position);
+                }
+			}
+		}
+	}
+
+	bool isObstacleInRoad(Vector3 obstaclePoint) {
+        float minDistance = Vector3.Distance(obstaclePoint,road.trackedPoints[0]);
+        for(int i = 1; i < road.trackedPoints.Count; ++i) {
+            float curr = Vector3.Distance(obstaclePoint,road.trackedPoints[i]);
+            if(curr < minDistance) {
+                minDistance = curr;
+            }
+        }
+        if(minDistance > (road.roadWidth/2)) {
+            return false;
+        }
+        return true;
+    }
+
+	void detectLight() {
+		GameObject[] traficLights =  GameObject.FindGameObjectsWithTag("TrafficLight");
+        RaycastHit hit;
+
+        foreach (GameObject trafficLight in traficLights) {
+            Vector3 screenPoint = Camera.main.WorldToScreenPoint(trafficLight.transform.position);
+            Ray ray = Camera.main.ScreenPointToRay(screenPoint);
+
+			if (Physics.Raycast(ray, out hit))
+			{
+                if (trafficLight.GetComponent<TrafficLightBehavior>().lightColor != 0){
+                    trafficLightsFound.Add(getLightTrack(trafficLight.transform.position, trafficLight.transform.forward));
+                }
+			}
+
+            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		    cube.transform.position = getLightTrack(trafficLight.transform.position, trafficLight.transform.forward);
+        }
+	}
+
+    Vector3 getLightTrack(Vector3 lightPosition,Vector3 rotation) {
+        Vector3 lightPoint = road.trackedPoints[0];
+        float minDist = Vector3.Distance(lightPosition,road.trackedPoints[0]);
+
+        for (int i = 1; i < road.trackedPoints.Count; ++i) {
+            Vector3 currPoint = road.trackedPoints[i];
+            float curr = -rotation.z * (currPoint.x - lightPosition.x) + rotation.x * (currPoint.z - lightPosition.z);
+
+            if (Mathf.Abs(curr) < 0.5) {
+                float currDist = Vector3.Distance(lightPosition,currPoint);
+                if(currDist < minDist) {
+                    lightPoint = currPoint;
+                    minDist = currDist;
+                }
+            }
+        }
+        return lightPoint;
+    }
 
 	void Awake() {
 		m_Car = GetComponent<UnityStandardAssets.Vehicles.Car.CarController>();
@@ -86,7 +163,6 @@ public class CarController : MonoBehaviour {
 	private void FixedUpdate()
 	{
 		// pass the input to the car!
-		int radius = 5;
 		List<GameObject> trackPoints;
 		trackPoints = FrontTrackPoints(10);
 		float desiredAngle = RotateAngle(trackPoints);

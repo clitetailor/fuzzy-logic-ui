@@ -430,3 +430,4 @@ MonoBehaviour:
   redTime: 10
   yellowTime: 5
   greenTime: 10
+  lightColor: 0
