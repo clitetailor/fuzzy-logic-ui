@@ -7,7 +7,7 @@ namespace FuzzyLogic {
         public static double[] LIGHT_YELLOW_ARGS = new double[2] {0d, 2d}; //5(s)
         public static double[] LIGHT_GREEN_ARGS = new double[3] {0d, 3d, 6d}; //10(s)
         public static double[] ANGLE_ARGS = new double[4] {0d, 22d, 45d, 67d}; //90(*)
-        public static double[] SPEED_ARGS = new double[5] {0d, 10d, 50d, 100d, 150d}; //150(mph)
+        public static double[] SPEED_ARGS = new double[5] {0d, 5d, 37d, 75d, 112d}; //150(mph)
         // type
         public const bool LIGHT_TYPE = true;
         public const bool OBSTACLE_TYPE = false;
@@ -92,7 +92,7 @@ namespace FuzzyLogic {
         };
 
         public static Object[] checkRule(String distance, String angle, String light_status = NONE) {
-            if (light_status == NONE) {
+            if (light_status != NONE) {
                 for (int i = 0, l = LIGHT_RULES.Length; i < l; i++) {
                     if (LIGHT_RULES[i, 0] == distance && LIGHT_RULES[i, 1] == light_status && LIGHT_RULES[i, 2] == angle) {
                         return new Object[4]{LIGHT_RULES[i, 0], LIGHT_RULES[i, 1], LIGHT_RULES[i, 2], LIGHT_RULES[i,3]};
