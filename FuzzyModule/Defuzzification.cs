@@ -15,11 +15,7 @@ namespace FuzzyLogic {
                 Func<double, double> f2 = FunctionToIntegrate(2, coeficients, label, muy);
                 double numerator = Integrate(f1, 0, 150, 1500);
                 double denominator = Integrate(f2, 0, 150, 1500);
-                // Console.Write("Case: ");
-                // foreach (var s in coeficients) {
-                //     Console.Write("{0}, ", s);
-                // }
-                Console.WriteLine("Result: {0} - {1} - {2} - {3}", label, muy, numerator, denominator);
+                // Console.WriteLine("Result: {0} - {1} - {2} - {3}", label, muy, numerator, denominator);
                 speed_total += (denominator != 0)? muy * (numerator/denominator): 0;
                 muy_total += muy;
             }          

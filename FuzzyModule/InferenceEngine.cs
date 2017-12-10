@@ -10,11 +10,9 @@ namespace FuzzyLogic {
             ArrayList speed;
             if (light_status != null) {
                 rule = Rules.checkRule((String)distance[0], (String) angle[0], (String) light_status[0]);
-                // Not sure how to parse. Type changing on input!
                 muy = Math.Min((double) distance[1], Math.Min((double) angle[1],(double) light_status[1]));
             } else {
                 rule = Rules.checkRule((String)distance[0], (String) angle[0]);
-                // same
                 muy = Math.Min((double) distance[1], (double) angle[1]);
             }
             label = (String) rule[rule.Length - 1];
