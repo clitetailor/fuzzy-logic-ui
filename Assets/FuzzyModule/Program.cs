@@ -1,15 +1,66 @@
 ﻿using System;
 using System.Collections;
+using System.IO;
 
 namespace FuzzyLogic {
     class Program {
         static void Main(string[] args){
-            bool type = Rules.LIGHT_TYPE;
-            double sample_distance = 99d;
-            double sample_lightTime = 7d;
-            double sample_angle = 1d;
-            Object[] light_status = new Object[2] {"Green", sample_lightTime };
-            Console.WriteLine("Speed: {0}", CalculateSpeed(type, sample_distance, sample_angle, light_status));
+            ArrayList distance = new ArrayList();
+            ArrayList angle = new ArrayList();
+            ArrayList light = new ArrayList();
+            ArrayList speed = new ArrayList();
+            double i = 0;
+            for (int d = 0; d <= 100; d++) {
+                for (int a = 0; a <= 90; a++) {
+                    // RED
+                    for (int l = 0; l <= 5; l++) {
+                        Console.Write("{0}-", i++);
+                        bool type = Rules.LIGHT_TYPE;
+                        double sample_distance = (double) d;
+                        double sample_lightTime = (double) l;
+                        double sample_angle = (double) a;
+                        Object[] light_status = new Object[2] {"Yellow", sample_lightTime};
+                        double spd = CalculateSpeed(type, sample_distance, sample_angle, light_status);
+                        distance.Add(sample_distance);
+                        angle.Add(sample_angle);
+                        light.Add(sample_lightTime);
+                        speed.Add(spd);
+                        if (Double.IsNaN(spd)) {
+                            Console.WriteLine("NaN: {0} {1} {2}", sample_distance, sample_angle, sample_lightTime);
+                            return;
+                        }
+                    }
+                }
+            }
+            
+            using(StreamWriter sr = new StreamWriter("distance-yellow.txt"))
+            {
+                foreach(var item in distance)
+                {
+                    sr.Write("{0} ", item);
+                }
+            }
+            using(StreamWriter sr = new StreamWriter("angle-yellow.txt"))
+            {
+                foreach(var item in angle)
+                {
+                    sr.Write("{0} ", item);
+                }
+            }
+            using(StreamWriter sr = new StreamWriter("light-yellow.txt"))
+            {
+                foreach(var item in light)
+                {
+                    sr.Write("{0} ", item);
+                }
+            }
+            using(StreamWriter sr = new StreamWriter("speed-yellow.txt"))
+            {
+                foreach(var item in speed)
+                {
+                    sr.Write("{0} ", item);
+                }
+            }
         }
 
         public static double CalculateSpeed(bool type, double distance, double angle, Object[] light_status) {
