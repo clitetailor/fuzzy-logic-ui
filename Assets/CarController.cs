@@ -97,19 +97,23 @@ public class CarController : MonoBehaviour {
 		// pass the input to the car!
 		int radius = 5;
 		List<GameObject> trackPoints;
-		trackPoints = FrontTrackPoints(2);
+		trackPoints = FrontTrackPoints(5);
 		float desiredAngle = RotateAngle(trackPoints);
-		float deltaAngle = desiredAngle - m_Car.CurrentSteerAngle;
+		//float deltaAngle = desiredAngle - m_Car.CurrentSteerAngle;
 
 		//Debug.Log("Current Angle: " + m_Car.CurrentSteerAngle);
-		//Debug.Log("Desired Angle: " + desiredAngle);
+		Debug.Log("Desired Angle: " + desiredAngle);
 		//Debug.Log("Delta Angle:   " + deltaAngle);
 
-		float h = CrossPlatformInputManager.GetAxis("Horizontal");
-		//float h = - deltaAngle / 90;
+		//float h1 = deltaAngle / 90;
+		float h = desiredAngle / 30;
+		//float h = CrossPlatformInputManager.GetAxis("Horizontal");
+		//float h = - desiredAngle / 90;
 		float v = CrossPlatformInputManager.GetAxis("Vertical");
 
 		Debug.Log("h:             " + h);
+		//Debug.Log("h1:            " + h1);
+		//Debug.Log("h2:            " + h2);
 
 		//Debug.Log(h);
 
@@ -131,7 +135,7 @@ public class CarController : MonoBehaviour {
 				Quaternion lookRotation = Quaternion.LookRotation(colliderOffset);
 
 				return collider.gameObject.name == "TrackedPoint"
-				&& Quaternion.Angle(lookRotation, transform.rotation) < 75
+				&& Quaternion.Angle(lookRotation, transform.rotation) < 60
 				&& Vector3.Distance(transform.position, collider.gameObject.transform.position) > 0f;
 			})
 			.Select(collider => collider.gameObject)
