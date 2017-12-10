@@ -5,17 +5,17 @@ namespace FuzzyLogic {
     class InferenceEngine {
         public static Object[] Inference(Object[] distance, Object[] angle, Object[] light_status = null) {
             Object[] rule;
-            double muy = 0;
+            double muy = 0d;
             String label;
             ArrayList speed;
             if (light_status != null) {
                 rule = Rules.checkRule((String)distance[0], (String) angle[0], (String) light_status[0]);
                 // Not sure how to parse. Type changing on input!
-                muy = Math.Min((int)distance[1], Math.Min((int)angle[1],(double) light_status[1]));
+                muy = Math.Min((double) distance[1], Math.Min((double) angle[1],(double) light_status[1]));
             } else {
                 rule = Rules.checkRule((String)distance[0], (String) angle[0]);
                 // same
-                muy = Math.Min((int) distance[1], (int) angle[1]);
+                muy = Math.Min((double) distance[1], (double) angle[1]);
             }
             label = (String) rule[rule.Length - 1];
             speed = CalculateSpeedCoefficient(label, muy);

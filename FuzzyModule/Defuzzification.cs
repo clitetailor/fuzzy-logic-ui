@@ -4,8 +4,8 @@ using System.Collections;
 namespace FuzzyLogic {
     class Defuzzification {
         public static double Defuzzificate(ArrayList inference_result) {
-            double speed_total = 0;
-            double muy_total = 0;
+            double speed_total = 0d;
+            double muy_total = 0d;
             foreach (var item in inference_result) {
                 Object[] l = (Object[]) item;
                 ArrayList coeficients = (ArrayList) l[0];
