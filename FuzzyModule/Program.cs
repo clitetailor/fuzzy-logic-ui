@@ -33,28 +33,28 @@ namespace FuzzyLogic {
                 }
             }
             
-            using(StreamWriter sr = new StreamWriter("distance-yellow.txt"))
+            using(StreamWriter sr = new StreamWriter("data/distance-yellow.txt"))
             {
                 foreach(var item in distance)
                 {
                     sr.Write("{0} ", item);
                 }
             }
-            using(StreamWriter sr = new StreamWriter("angle-yellow.txt"))
+            using(StreamWriter sr = new StreamWriter("data/angle-yellow.txt"))
             {
                 foreach(var item in angle)
                 {
                     sr.Write("{0} ", item);
                 }
             }
-            using(StreamWriter sr = new StreamWriter("light-yellow.txt"))
+            using(StreamWriter sr = new StreamWriter("data/light-yellow.txt"))
             {
                 foreach(var item in light)
                 {
                     sr.Write("{0} ", item);
                 }
             }
-            using(StreamWriter sr = new StreamWriter("speed-yellow.txt"))
+            using(StreamWriter sr = new StreamWriter("data/speed-yellow.txt"))
             {
                 foreach(var item in speed)
                 {
