@@ -8,8 +8,8 @@ public class Vertices : MonoBehaviour {
     private GameObject pathPlane;
 	private Mesh roadMesh;
 
-	[HideInInspector]
-	public List<Vector3> trackedPoints = new List<Vector3>();
+	[HideInInspector] public List<Vector3> trackedPoints = new List<Vector3>();
+	[HideInInspector] public List<GameObject> trackedNavigators = new List<GameObject>();
 
 	[HideInInspector]
 	public List<List<Vector3>> vertexTriples = new List<List<Vector3>>();
@@ -58,6 +58,17 @@ public class Vertices : MonoBehaviour {
 			if (edgePoints.Count == 2) {
 				trackedPoints.Add((edgePoints[0] + edgePoints[1]) / 2);
 			}
+		}
+
+		for (int i = 0; i < trackedPoints.Count; ++i) {
+			Vector3 currPoint = trackedPoints[i];
+			Vector3 nextPoint = trackedPoints[(i + 1) % trackedPoints.Count];
+
+			GameObject navigator = new GameObject("TrackedPoint");
+			navigator.transform.position = currPoint;
+			navigator.transform.rotation = Quaternion.LookRotation(nextPoint - currPoint);
+
+			trackedNavigators.Add(navigator);
 		}
 	}
 }
