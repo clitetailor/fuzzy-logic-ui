@@ -21,7 +21,8 @@ public class TrafficLightBehavior : MonoBehaviour {
 	}
     [HideInInspector]
 	public LightColor lightColor = LightColor.GREEN_LIGHT;
-	int countDown = 0;
+	[HideInInspector]
+	public int countDown = 0;
 
 	// Use this for initialization
 	void Start () {

@@ -8,16 +8,10 @@ using FuzzyLogic;
 [RequireComponent(typeof(UnityStandardAssets.Vehicles.Car.CarController))]
 public class CarController : MonoBehaviour
 {
-    private const float mpsToMPH = 2.2369362912f;
-
     UnityStandardAssets.Vehicles.Car.CarController m_Car;
     Vertices road;
     List<Vector3> trafficLightsFound = new List<Vector3>();
     List<Vector3> obstaclesOnScreen = new List<Vector3>();
-
-    Transform target;
-    Vector3 offsetTargetPos;
-    new Rigidbody rigidbody;
 
 	List<TrafficLightBehavior> trafficLights;
 
@@ -33,8 +27,6 @@ public class CarController : MonoBehaviour
 		trafficLights = GameObject.FindGameObjectsWithTag("TrafficLight")
 			.Select(gameObject => gameObject.GetComponent<TrafficLightBehavior>())
 			.ToList();
-		
-        rigidbody = GetComponent<Rigidbody>();
     }
 
     void Awake()
@@ -60,14 +52,66 @@ public class CarController : MonoBehaviour
 
     #if !MOBILE_INPUT
         float handbrake = CrossPlatformInputManager.GetAxis("Jump");
-        m_Car.Move(h, v, v, handbrake);
+        m_Car.Move(h, speed, v, handbrake);
     #else
             m_Car.Move(h, v, v, 0f);
     #endif
     }
 
 	private float CaculateSpeed(float roadAngle) {
-		return (float) Program.CalculateSpeed(true, 10d, roadAngle, new System.Object[2] { "Yellow", 2d });
+		TrafficLightBehavior trafficLight = DetectTrafficLight();
+		GameObject obstacle = NearestObstacle();
+
+		float offsetObstacle = Mathf.Infinity;
+		if (obstacle != null) {
+			offsetObstacle = Vector3.Distance(obstacle.transform.position, transform.position);
+		}
+
+		float offsetTrafficLight = Mathf.Infinity;
+		if (trafficLight != null) {
+			offsetTrafficLight = Vector3.Distance(trafficLight.transform.position, transform.position);
+		}
+
+		if (obstacle == null && trafficLight == null) {
+			Debug.Log("Both");
+			return 0.1f;
+		}
+
+		bool isLight = offsetTrafficLight < offsetObstacle ? true : false;
+		
+		if (offsetTrafficLight < offsetObstacle)
+		{
+			Debug.Log("TrafficLight");
+			object[] lightStatus;
+
+			switch (trafficLight.lightColor) {
+				case (TrafficLightBehavior.LightColor.GREEN_LIGHT): {
+						lightStatus = new object[2] { "Green", (double) trafficLight.countDown };
+						break;
+				}
+
+				case (TrafficLightBehavior.LightColor.YELLOW_LIGHT): {
+						lightStatus = new object[2] { "Yellow", (double) trafficLight.countDown };
+						break;
+				}
+
+				case (TrafficLightBehavior.LightColor.RED_LIGHT): {
+						lightStatus = new object[2] { "Red", (double) trafficLight.countDown };
+						break;
+				}
+
+				default: {
+						lightStatus = new object[2] { "Green", trafficLight.countDown };
+						break;
+				}
+			}
+
+			return (float) Program.CalculateSpeed(true, offsetTrafficLight, roadAngle, lightStatus);
+		} else
+		{
+			Debug.Log("Obstacle");
+			return (float) Program.CalculateSpeed(false, offsetObstacle, roadAngle, null);
+		}
 	}
 
     private List<GameObject> FrontTrackPoints(int radius)

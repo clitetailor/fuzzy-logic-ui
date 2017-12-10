@@ -69,8 +69,9 @@ public class Vertices : MonoBehaviour
 			{
 				for (int j = 1; j < trafficLights.Count; ++j)
 				{
-					if (edgePoints[0] == trafficLights[j])
+					if (edgePoints[0] == trafficLights[0])
 					{
+						Debug.Log(1);
 						Vector3 position = edgePoints[0];
 						Vector3 rotation;
 						rotation = edgePoints[1] - edgePoints[0];
@@ -80,9 +81,10 @@ public class Vertices : MonoBehaviour
 
 					if (edgePoints[1] == trafficLights[j])
 					{
+						Debug.Log(2);
 						Vector3 position = edgePoints[1];
 						Vector3 rotation;
-						rotation = edgePoints[0] - edgePoints[1];
+						rotation = edgePoints[1] - edgePoints[0];
 						Instantiate(GameObject.FindGameObjectsWithTag("TrafficLight")[0], position, Quaternion.LookRotation(rotation));
 						trafficLights[j] = Vector3.zero;
 					}
