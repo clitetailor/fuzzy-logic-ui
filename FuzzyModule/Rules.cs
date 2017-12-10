@@ -19,7 +19,7 @@ namespace FuzzyLogic {
         //LightStatus
         public const String R = "Red";
         public const String LR = "Less Red";
-        public const String Y = "Yello";
+        public const String Y = "Yellow";
         public const String LG = "Less Green";
         public const String G = "Green";
         //Angle
