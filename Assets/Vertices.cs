@@ -1,54 +1,75 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+using System;
 
 public class Vertices : MonoBehaviour {
     private GameObject pathPlane;
-    private Collider anObjCollider;
-	private Mesh viewedModel;
+	private Mesh roadMesh;
 
-    // Use this for initialization
-    void Start() {
+	Vector3[] vertices;
+	int[] triangles;
+
+	List<Vector3> trackedPoints = new List<Vector3>();
+
+	int numberOfTriangles = 0;
+
+	ArrayList vertexTriples = new ArrayList();
+
+	// Use this for initialization
+	void Start() {
 		pathPlane = GameObject.Find("Plane.001");
 
-		MeshFilter viewedModelFilter = (MeshFilter) pathPlane.GetComponent("MeshFilter");
-		viewedModel = viewedModelFilter.mesh;
-		Vector3[] vertices = viewedModel.vertices;
-        int[] triangles = viewedModel.triangles;
-		Vector3 scale = pathPlane.transform.localScale;
-		Quaternion rotation = pathPlane.transform.localRotation;
-        Vector3[] filteredVirtice = new Vector3[vertices.Length];
-		int i = 0;
+		roadMesh = pathPlane.GetComponent<MeshFilter>().mesh;
+		vertices = roadMesh.vertices;
+        triangles = roadMesh.triangles;
+		
 
-		while(i < vertices.Length) {
-			Vector3 worldPoint = transform.TransformPoint(vertices[i]);
-			Vector3 centerWorldPoint = pathPlane.transform.position;
-			float distance = Vector3.Distance(centerWorldPoint,worldPoint);
+		Vector3 roadCenter = pathPlane.transform.position;
 
-			if(distance < 1000) {
-				if (distance > 1){
-                    filteredVirtice[i] = new Vector3(worldPoint.x, 0, worldPoint.z);
-					i++;
-				} else {
-                    i++;
-                }                    
-			} else {
-                i++;
-            }
+		Vector3[] absolutePositions = new Vector3[vertices.Length];
+
+		for (int i = 0; i < vertices.Length; ++i) {
+			Vector3 vertex = transform.TransformPoint(vertices[i]);
+			absolutePositions[i] = new Vector3(vertex.x, 0, vertex.z);
 		}
 
-        for(int j = 1; j < triangles.Length; ++j) {
-            int index1 = triangles[j],
-                index2 = triangles[j-1];
+		vertices = absolutePositions;
+		
+		numberOfTriangles = triangles.Length / 3;
 
-            Vector3 worldPoint = filteredVirtice[index1],
-                    worldPoint1 = filteredVirtice[index2];
+		for (int i = 0; i < numberOfTriangles; ++i) {
+			int startIndex = i * 3;
+			Vector3[] triple = {
+				vertices[ triangles[startIndex] ],
+				vertices[ triangles[startIndex + 1] ],
+				vertices[ triangles[startIndex + 2] ]
+			};
 
-            if (worldPoint != Vector3.zero){
-                GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                cube.transform.position = new Vector3((worldPoint.x + worldPoint1.x)/2, 0, (worldPoint.z + worldPoint1.z)/2);
-			    cube.name = j.ToString();
-            }
-        }
+			vertexTriples.Add(triple);
+		}
+
+		for (int i = 0; i < numberOfTriangles; ++i)
+		{
+			Vector3[] curr = (Vector3[])vertexTriples[i];
+			Vector3[] next = (Vector3[])vertexTriples[(i + 1) % numberOfTriangles];
+
+			ArrayList edgePoints = new ArrayList();
+			foreach (Vector3 vertex in next) {
+				if (Array.IndexOf(curr, vertex) != -1) {
+					edgePoints.Add(vertex);
+				}
+			}
+
+			if (edgePoints.Count == 2) {
+				trackedPoints.Add(((Vector3) edgePoints[0] + (Vector3) edgePoints[1]) / 2);
+			}
+		}
+
+		foreach (Vector3 point in trackedPoints) {
+			GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+			cube.transform.position = point;
+		}
 	}
 }
