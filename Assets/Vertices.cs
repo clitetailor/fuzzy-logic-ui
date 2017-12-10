@@ -67,6 +67,9 @@ public class Vertices : MonoBehaviour {
 			GameObject navigator = new GameObject("TrackedPoint");
 			navigator.transform.position = currPoint;
 			navigator.transform.rotation = Quaternion.LookRotation(nextPoint - currPoint);
+			navigator.AddComponent<BoxCollider>();
+			Collider collider = navigator.GetComponent<BoxCollider>();
+			collider.isTrigger = true;
 
 			trackedNavigators.Add(navigator);
 		}

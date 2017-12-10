@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
+using System.Linq;
 
 [RequireComponent(typeof (UnityStandardAssets.Vehicles.Car.CarController))]
 public class CarController : MonoBehaviour {
@@ -40,6 +41,7 @@ public class CarController : MonoBehaviour {
 		m_Car = GetComponent<UnityStandardAssets.Vehicles.Car.CarController>();
 	}
 
+	/*
 	void FixedUpdate()
 	{
 		Vector3 fwd = transform.forward;
@@ -67,7 +69,6 @@ public class CarController : MonoBehaviour {
 		desiredSpeed = Mathf.Lerp(m_Car.MaxSpeed, m_Car.MaxSpeed * m_CautiousSpeedFactor,
 									cautiousnessRequired);
 
-
 		// use different sensitivity depending on whether accelerating or braking:
 		float accelBrakeSensitivity = (desiredSpeed < m_Car.CurrentSpeed)
 											? m_BrakeSensitivity
@@ -87,5 +88,80 @@ public class CarController : MonoBehaviour {
 
 		// feed input to the car controller.
 		m_Car.Move(steer, accel, accel, 0f);
+	}
+	*/
+
+	
+	private void FixedUpdate()
+	{
+		// pass the input to the car!
+		int radius = 5;
+		List<GameObject> trackPoints;
+		trackPoints = FrontTrackPoints(2);
+		float desiredAngle = RotateAngle(trackPoints);
+		float deltaAngle = desiredAngle - m_Car.CurrentSteerAngle;
+
+		//Debug.Log("Current Angle: " + m_Car.CurrentSteerAngle);
+		//Debug.Log("Desired Angle: " + desiredAngle);
+		//Debug.Log("Delta Angle:   " + deltaAngle);
+
+		float h = CrossPlatformInputManager.GetAxis("Horizontal");
+		//float h = - deltaAngle / 90;
+		float v = CrossPlatformInputManager.GetAxis("Vertical");
+
+		Debug.Log("h:             " + h);
+
+		//Debug.Log(h);
+
+#if !MOBILE_INPUT
+		float handbrake = CrossPlatformInputManager.GetAxis("Jump");
+		m_Car.Move(h, v, v, handbrake);
+#else
+        m_Car.Move(h, v, v, 0f);
+#endif
+	}
+
+	private List<GameObject> FrontTrackPoints(int radius) {
+		List<Collider> colliders = new List<Collider>(Physics.OverlapSphere(transform.position, radius));
+
+		return colliders
+			.Where(collider =>
+			{
+				Vector3 colliderOffset = collider.transform.position - transform.position;
+				Quaternion lookRotation = Quaternion.LookRotation(colliderOffset);
+
+				return collider.gameObject.name == "TrackedPoint"
+				&& Quaternion.Angle(lookRotation, transform.rotation) < 75
+				&& Vector3.Distance(transform.position, collider.gameObject.transform.position) > 0f;
+			})
+			.Select(collider => collider.gameObject)
+			.ToList();
+	}
+
+	private float RotateAngle(List<GameObject> trackPoints) {
+		List<float> amounts = trackPoints
+			.Select(point =>
+				Vector3.Distance(point.transform.position, transform.position))
+			.Select(length => 1f / length)
+			.ToList();
+		
+		float sum = 0;
+
+		foreach (float amount in amounts) {
+			sum += amount;
+		}
+
+		amounts = amounts.Select(amount => amount / sum)
+			.ToList();
+
+		float angle = 0f;
+		for (int i = 0; i < trackPoints.Count; ++i) {
+			Vector3 carRotation = transform.rotation.eulerAngles;
+			Vector3 pointRotation = trackPoints[i].transform.rotation.eulerAngles;
+
+			angle = (pointRotation.y - carRotation.y) * amounts[i];
+		}
+
+		return angle;
 	}
 }
