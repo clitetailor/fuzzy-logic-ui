@@ -19,7 +19,7 @@ namespace FuzzyLogic {
                 speed_total += (denominator != 0)? muy * (numerator/denominator): 0;
                 muy_total += muy;
             }          
-            return (double) speed_total / muy_total;
+            return (muy_total != 0)? (double) speed_total / muy_total: 0;
         }
 
         private static double Integrate(Func<double,double> f, double x_low, double x_high, int N_steps) {
