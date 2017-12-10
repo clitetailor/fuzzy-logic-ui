@@ -8,10 +8,11 @@ public class Vertices : MonoBehaviour {
     private GameObject pathPlane;
 	private Mesh roadMesh;
 
+	[HideInInspector]
+	public List<Vector3> trackedPoints = new List<Vector3>();
 
-	List<Vector3> trackedPoints = new List<Vector3>();
-
-	List<List<Vector3>> vertexTriples = new List<List<Vector3>>();
+	[HideInInspector]
+	public List<List<Vector3>> vertexTriples = new List<List<Vector3>>();
 
 	// Use this for initialization
 	void Start() {
@@ -23,7 +24,7 @@ public class Vertices : MonoBehaviour {
 		
 		// To absolute positions
 		vertices = vertices
-			.Select(vertex => transform.TransformPoint(vertex))
+			.Select(vertex => pathPlane.transform.TransformPoint(vertex))
 			.ToList();
 
 		int numberOfTriangles = triangles.Count / 3;
@@ -53,14 +54,15 @@ public class Vertices : MonoBehaviour {
 				}
 			}
 
+			// Find the edge midpoint
 			if (edgePoints.Count == 2) {
-				trackedPoints.Add(((Vector3) edgePoints[0] + (Vector3) edgePoints[1]) / 2);
+				trackedPoints.Add((edgePoints[0] + edgePoints[1]) / 2);
 			}
 		}
 
-		foreach (Vector3 point in trackedPoints) {
+		foreach (Vector3 vertex in trackedPoints) {
 			GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-			cube.transform.position = point;
+			cube.transform.position = vertex;
 		}
 	}
 }

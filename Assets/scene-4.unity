@@ -398,6 +398,22 @@ Prefab:
     - {fileID: 11400022, guid: 0e7ee4df08df88c4880f43398f9ad2c2, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 0e7ee4df08df88c4880f43398f9ad2c2, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1190810057 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100002, guid: 51f16cdec01e2584b9d1af434635054c, type: 3}
+  m_PrefabInternal: {fileID: 96198513}
+--- !u!114 &1190810058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1190810057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 219ab3fd94bd13b48ae95794813a9af0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trackedPoints: []
 --- !u!1 &1392665503 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100042, guid: 0e7ee4df08df88c4880f43398f9ad2c2, type: 2}
@@ -499,21 +515,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1717111621 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 100004, guid: 51f16cdec01e2584b9d1af434635054c, type: 3}
-  m_PrefabInternal: {fileID: 96198513}
---- !u!114 &1717111622
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1717111621}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 219ab3fd94bd13b48ae95794813a9af0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1954082303
 Prefab:
   m_ObjectHideFlags: 0

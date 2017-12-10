@@ -5,7 +5,7 @@ using UnityEngine;
 public class ObstacleScript : MonoBehaviour {
 
 	private new Camera camera;
-	private new GameObject car;
+	private GameObject car;
 
 	// Use this for initialization
 	void Start () {

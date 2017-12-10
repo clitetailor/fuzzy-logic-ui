@@ -6,12 +6,16 @@ using UnityStandardAssets.CrossPlatformInput;
 [RequireComponent(typeof (UnityStandardAssets.Vehicles.Car.CarController))]
 public class CarController : MonoBehaviour {
 
-	UnityStandardAssets.Vehicles.Car.CarController m_Car; // the car controller we want to use
+	UnityStandardAssets.Vehicles.Car.CarController m_Car;
 	Vertices road;
 
 	void Start() {
 		GameObject path = GameObject.Find("Path").gameObject;
-		road = path.transform.Find("Plane.001").GetComponent<Vertices>();
+		road = path.GetComponent<Vertices>();
+
+		transform.position = road.trackedPoints[0];
+		Vector3 direction = road.trackedPoints[1] - road.trackedPoints[0];
+		transform.rotation = Quaternion.LookRotation(direction);
 	}
 
 	void Awake() {
