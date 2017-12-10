@@ -20,7 +20,7 @@ namespace FuzzyLogic {
                 //     Console.Write("{0}, ", s);
                 // }
                 // Console.WriteLine(" {0} - {1} - {2} - {3}", label, muy, numerator, denominator);
-                speed_total += muy * (numerator/denominator);
+                speed_total += (denominator != 0)? muy * (numerator/denominator): 0;
                 muy_total += muy;
             }          
             return (double) speed_total / muy_total;
