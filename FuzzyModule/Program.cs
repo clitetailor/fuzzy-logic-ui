@@ -63,18 +63,23 @@ namespace FuzzyLogic {
             }
         }
 
-        public static double CalculateSpeed(bool type, double distance, double angle, Object[] light_status) {
-            ArrayList fuzzificate = Fuzzificate(type, distance, angle, light_status);
+        public static double CalculateSpeed(bool type, double distance, double angle, Object[] light_status=null) {
+            ArrayList fuzzificate;
+            if (light_status != null) {
+                fuzzificate = Fuzzificate(distance, angle, light_status);
+            } else {
+                fuzzificate = Fuzzificate(distance, angle);
+            }
             ArrayList inference = InferenceWorking(type, fuzzificate);
             double speed = Defuzzification.Defuzzificate(inference);
             return (double) speed;
         }
 
-        private static ArrayList Fuzzificate(bool isLight, double distance, double angle, Object[] light_status) {
+        private static ArrayList Fuzzificate(double distance, double angle, Object[] light_status=null) {
             ArrayList distance_instances = Fuzzification.DistanceFuzzificate(distance);
             ArrayList angle_instances = Fuzzification.AngleFuzzificate(angle);
             ArrayList light_instances;
-            if (isLight) {
+            if (light_status != null) {
                 light_instances = Fuzzification.LightFuzzificate(light_status);
             } else {
                 light_instances = null;
