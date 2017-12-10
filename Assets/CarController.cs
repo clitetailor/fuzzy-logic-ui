@@ -48,14 +48,9 @@ public class CarController : MonoBehaviour
 
 		float speed = CaculateSpeed(desiredAngle);
 
-		Debug.Log(speed);
+        float handbrake = 0f;
 
-    #if !MOBILE_INPUT
-        float handbrake = CrossPlatformInputManager.GetAxis("Jump");
-        m_Car.Move(h, speed, v, handbrake);
-    #else
-            m_Car.Move(h, v, v, 0f);
-    #endif
+        m_Car.Move(h, speed, v, 0f);
     }
 
 	private float CaculateSpeed(float roadAngle) {
@@ -74,7 +69,7 @@ public class CarController : MonoBehaviour
 
 		if (obstacle == null && trafficLight == null) {
 			Debug.Log("Both");
-			return 0.1f;
+			return 0.3f;
 		}
 
 		bool isLight = offsetTrafficLight < offsetObstacle ? true : false;
@@ -105,12 +100,13 @@ public class CarController : MonoBehaviour
 						break;
 				}
 			}
-
-			return (float) Program.CalculateSpeed(true, offsetTrafficLight, roadAngle, lightStatus);
+			float speed = (float) Program.CalculateSpeed(true, offsetTrafficLight, roadAngle, lightStatus);
+			Debug.Log(speed);
+			return speed / (120f / 0.3f);
 		} else
 		{
 			Debug.Log("Obstacle");
-			return (float) Program.CalculateSpeed(false, offsetObstacle, roadAngle, null);
+			return (float) Program.CalculateSpeed(false, offsetObstacle, roadAngle, null) / (120f / 0.2f);
 		}
 	}
 
