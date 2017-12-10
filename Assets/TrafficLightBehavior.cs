@@ -14,13 +14,13 @@ public class TrafficLightBehavior : MonoBehaviour {
 
 	TextMesh countDownText;
 
-	enum LightColor { 
+	public enum LightColor { 
 		GREEN_LIGHT,
 		YELLOW_LIGHT,
 		RED_LIGHT
 	}
-
-	LightColor lightColor = LightColor.GREEN_LIGHT;
+    [HideInInspector]
+	public LightColor lightColor = LightColor.GREEN_LIGHT;
 	int countDown = 0;
 
 	// Use this for initialization
@@ -113,4 +113,5 @@ public class TrafficLightBehavior : MonoBehaviour {
 	void Update () {
 		
 	}
+
 }
