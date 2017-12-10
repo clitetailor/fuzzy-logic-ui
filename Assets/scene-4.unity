@@ -559,6 +559,10 @@ Prefab:
       propertyPath: m_Anchor
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1255438655934344, guid: 910fec6bfbe4afd4687777ad8037acce, type: 2}
+      propertyPath: m_TagString
+      value: TrafficLight
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 910fec6bfbe4afd4687777ad8037acce, type: 2}
   m_IsPrefabParent: 0
