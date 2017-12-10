@@ -19,7 +19,7 @@ namespace FuzzyLogic {
                 // foreach (var s in coeficients) {
                 //     Console.Write("{0}, ", s);
                 // }
-                Console.WriteLine(" {0} - {1} - {2} - {3}", label, muy, numerator, denominator);
+                Console.WriteLine("Result: {0} - {1} - {2} - {3}", label, muy, numerator, denominator);
                 speed_total += (denominator != 0)? muy * (numerator/denominator): 0;
                 muy_total += muy;
             }          
@@ -88,8 +88,12 @@ namespace FuzzyLogic {
                 }
                 case Rules.St: {
                     result = y => {
-                        return (type == 1)? y * (Rules.SPEED_ARGS[1] - y) / (Rules.SPEED_ARGS[1] - Rules.SPEED_ARGS[0])
-                                            : (Rules.SPEED_ARGS[1] - y) / (Rules.SPEED_ARGS[1] - Rules.SPEED_ARGS[0]);
+                        if (y >= Rules.SPEED_ARGS[0] && y < Rules.SPEED_ARGS[1]) {
+                            return (type == 1)? y * (Rules.SPEED_ARGS[1] - y) / (Rules.SPEED_ARGS[1] - Rules.SPEED_ARGS[0])
+                                                : (Rules.SPEED_ARGS[1] - y) / (Rules.SPEED_ARGS[1] - Rules.SPEED_ARGS[0]);
+                        } else {
+                            return 0;
+                        }
                     };
                     break;
                 }
