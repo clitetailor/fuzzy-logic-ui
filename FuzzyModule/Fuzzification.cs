@@ -106,7 +106,7 @@ namespace FuzzyLogic {
                 if (value > 0) {
                     result.Add(new Object[2] {Rules.B, (double) value});
                 }
-            } else if (angle >= Rules.ANGLE_ARGS[4]) {
+            } else if (angle >= Rules.ANGLE_ARGS[3]) {
                 result.Add(new Object[2] {Rules.B, 1d});
             }
             return result;
