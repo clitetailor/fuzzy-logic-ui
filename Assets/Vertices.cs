@@ -71,7 +71,7 @@ public class Vertices : MonoBehaviour
 				{
 					if (edgePoints[0] == trafficLights[0])
 					{
-						Debug.Log(1);
+						//Debug.Log(1);
 						Vector3 position = edgePoints[0];
 						Vector3 rotation;
 						rotation = edgePoints[1] - edgePoints[0];
@@ -81,7 +81,7 @@ public class Vertices : MonoBehaviour
 
 					if (edgePoints[1] == trafficLights[j])
 					{
-						Debug.Log(2);
+						//Debug.Log(2);
 						Vector3 position = edgePoints[1];
 						Vector3 rotation;
 						rotation = edgePoints[1] - edgePoints[0];

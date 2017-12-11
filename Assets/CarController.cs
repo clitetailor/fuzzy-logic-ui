@@ -15,6 +15,8 @@ public class CarController : MonoBehaviour
 
 	List<TrafficLightBehavior> trafficLights;
 
+	new Rigidbody rigid;
+
     void Start()
     {
         GameObject path = GameObject.Find("Path").gameObject;
@@ -27,6 +29,8 @@ public class CarController : MonoBehaviour
 		trafficLights = GameObject.FindGameObjectsWithTag("TrafficLight")
 			.Select(gameObject => gameObject.GetComponent<TrafficLightBehavior>())
 			.ToList();
+
+		rigid = m_Car.GetComponent<Rigidbody>();
     }
 
     void Awake()
@@ -48,6 +52,14 @@ public class CarController : MonoBehaviour
 
 		float speed = CaculateSpeed(desiredAngle);
 
+
+		float __angle = Vector3.Angle(rigid.velocity, transform.forward);
+		if (speed < 0.004f && rigid.velocity.magnitude > 0 && __angle < 60) {
+			v = -0.04f;
+		}
+
+		//Debug.Log(m_Car.CurrentSpeed);
+
         float handbrake = 0f;
 
         m_Car.Move(h, speed, v, 0f);
@@ -56,6 +68,9 @@ public class CarController : MonoBehaviour
 	private float CaculateSpeed(float roadAngle) {
 		TrafficLightBehavior trafficLight = DetectTrafficLight();
 		GameObject obstacle = NearestObstacle();
+
+		roadAngle = Mathf.Abs(roadAngle);
+		Debug.Log("Angle: " + roadAngle);
 
 		float offsetObstacle = Mathf.Infinity;
 		if (obstacle != null) {
@@ -68,45 +83,59 @@ public class CarController : MonoBehaviour
 		}
 
 		if (obstacle == null && trafficLight == null) {
-			Debug.Log("Both");
+			//Debug.Log("Both");
 			return 0.3f;
 		}
 
 		bool isLight = offsetTrafficLight < offsetObstacle ? true : false;
-		
+
 		if (offsetTrafficLight < offsetObstacle)
 		{
-			Debug.Log("TrafficLight");
+			Debug.Log("TrafficLight " + offsetTrafficLight);
+			Debug.Log(roadAngle);
 			object[] lightStatus;
 
-			switch (trafficLight.lightColor) {
-				case (TrafficLightBehavior.LightColor.GREEN_LIGHT): {
-						lightStatus = new object[2] { "Green", (double) trafficLight.countDown };
+			switch (trafficLight.lightColor)
+			{
+				case (TrafficLightBehavior.LightColor.GREEN_LIGHT):
+					{
+						lightStatus = new object[2] { "Green", (double)trafficLight.countDown };
 						break;
-				}
+					}
 
-				case (TrafficLightBehavior.LightColor.YELLOW_LIGHT): {
-						lightStatus = new object[2] { "Yellow", (double) trafficLight.countDown };
+				case (TrafficLightBehavior.LightColor.YELLOW_LIGHT):
+					{
+						lightStatus = new object[2] { "Yellow", (double)trafficLight.countDown };
 						break;
-				}
+					}
 
-				case (TrafficLightBehavior.LightColor.RED_LIGHT): {
-						lightStatus = new object[2] { "Red", (double) trafficLight.countDown };
+				case (TrafficLightBehavior.LightColor.RED_LIGHT):
+					{
+						lightStatus = new object[2] { "Red", (double)trafficLight.countDown };
 						break;
-				}
+					}
 
-				default: {
+				default:
+					{
 						lightStatus = new object[2] { "Green", trafficLight.countDown };
 						break;
-				}
+					}
 			}
-			float speed = (float) Program.CalculateSpeed(true, offsetTrafficLight, roadAngle, lightStatus);
-			Debug.Log(speed);
+			Debug.Log(lightStatus[0]);
+			float speed = (float)Program.CalculateSpeed(true, offsetTrafficLight, roadAngle, lightStatus);
+			Debug.Log("speed: " + speed);
+			if (speed < 2)
+			{
+				speed = 0f;
+			}
 			return speed / (120f / 0.3f);
-		} else
+		}
+		else
 		{
-			Debug.Log("Obstacle");
-			return (float) Program.CalculateSpeed(false, offsetObstacle, roadAngle, null) / (120f / 0.2f);
+			//Debug.Log("Obstacle");
+			float speed = (float)Program.CalculateSpeed(false, offsetObstacle, roadAngle, null);
+			Debug.Log("speed: " + speed);
+			return speed / (120f / 0.2f);
 		}
 	}
 
